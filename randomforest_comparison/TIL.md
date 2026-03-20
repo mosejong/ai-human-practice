@@ -1,0 +1,98 @@
+# 📌 RandomForest 모델 비교 및 Feature Importance 분석
+
+## 1. 실습 목적
+- RandomForest 모델의 하이퍼파라미터(n_estimators, max_depth)에 따른 성능 변화를 확인한다.
+- URL 기반 feature engineering의 효과를 분석한다.
+- Feature importance를 통해 어떤 feature가 중요한지 파악한다.
+
+---
+
+## 2. 모델 설정
+
+### (1) 기본 모델
+- RandomForest (n_estimators=100)
+
+### (2) 트리 개수 증가
+- RandomForest (n_estimators=200)
+
+### (3) 깊이 제한
+- RandomForest (n_estimators=200, max_depth=10)
+
+---
+
+## 3. 성능 비교 결과
+
+| Model | Accuracy | Precision | Recall | F1 |
+|------|--------|----------|--------|----|
+| RF (n=100) | 0.9113 | 0.8877 | 0.6898 | 0.7763 |
+| RF (n=200) | 0.9113 | 0.8880 | 0.6896 | 0.7763 |
+| RF (n=200, depth=10) | 0.8921 | 0.8538 | 0.6233 | 0.7206 |
+
+---
+
+## 4. 결과 해석
+
+### (1) n_estimators 영향
+- n_estimators를 100 → 200으로 증가시켜도 성능 변화는 거의 없었다.
+- 일정 수준 이상의 트리 개수에서는 성능 향상이 크지 않음을 확인하였다.
+
+---
+
+### (2) max_depth 영향
+- max_depth=10을 적용했을 때 모든 지표(accuracy, precision, recall, f1)가 감소하였다.
+- 특히 recall이 크게 감소하였다.
+- 이는 모델이 실제 양성을 놓치는 경우가 증가했음을 의미한다.
+
+👉 해석:
+- 트리 깊이 제한으로 인해 모델의 표현력이 부족해짐
+- 과소적합(underfitting) 발생
+
+---
+
+## 5. Feature Engineering 결과
+
+- URL에서 '@', '?', '=' 개수를 feature로 추가하였다.
+- 그러나 성능 변화는 거의 없었다.
+
+👉 해석:
+- 해당 feature들이 추가적인 정보를 제공하지 못함
+- RandomForest는 중요하지 않은 feature를 자동으로 덜 반영함
+
+---
+
+## 6. Feature Importance 분석
+
+### 상위 중요 feature
+- url_length (0.2568)
+- slash_count (0.1922)
+- digit_count (0.1627)
+- hostname_length (0.1499)
+
+👉 특징:
+- URL의 길이, 구조, 숫자 비율이 중요하게 작용
+
+---
+
+### 낮은 중요 feature
+- 특수문자 관련 feature (@, ?, = 등)
+- 일부 키워드 기반 feature
+
+👉 특징:
+- 특정 상황에서만 나타나는 feature는 중요도가 낮음
+
+---
+
+## 7. 최종 결론
+
+- RandomForest에서는 단순히 트리 개수를 늘리는 것보다 적절한 파라미터 설정이 중요하다.
+- max_depth를 과도하게 제한하면 성능이 오히려 감소할 수 있다.
+- 모델은 개별 문자보다 URL의 전체 구조를 더 중요한 판단 기준으로 사용한다.
+- 효과적인 feature engineering을 위해서는 의미 있는 구조적 feature 설계가 중요하다.
+
+---
+
+## 8. 느낀 점
+
+- 단순히 모델을 실행하는 것이 아니라 결과를 해석하는 과정이 중요하다는 것을 느꼈다.
+- feature를 추가했을 때 성능이 변하지 않는 이유를 분석하면서 모델의 동작 방식을 이해할 수 있었다.
+- 앞으로는 다양한 feature를 실험하고 importance를 함께 확인하는 방식으로 학습할 예정이다.
