@@ -1,7 +1,17 @@
-randomforest_comparison/data/
-randomforest_comparison/submission.csv
-*.csv
+# Jupyter
+.ipynb_checkpoints/
+
+# Python
 __pycache__/
 *.pyc
-.venv/
-.env
+
+# Data / ML artifacts
+*.csv
+*.npz
+*.pkl
+*.pickle
+*.joblib
+
+url_classification/data/
+url_classification/02_tfidf_naive_bayes/*.npz
+url_classification/02_tfidf_naive_bayes/*.pkl
